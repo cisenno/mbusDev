@@ -402,7 +402,7 @@ NAN_METHOD(MbusMaster::Get) {
 
     char num_char[10 + sizeof(char)];
     std::sprintf(num_char, "%d", max_frames);
-    MBUS_ERROR("max frames = %s.", num_char);
+    MBUS_ERROR("[INFO] Max frames = %s \n", num_char);
 
     if(obj->connected) {
         obj->communicationInProgress = true;
