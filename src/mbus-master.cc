@@ -233,8 +233,8 @@ static int init_slaves(mbus_handle *handle)
 
 class RecieveWorker : public Nan::AsyncWorker {
 public:
-    RecieveWorker(Nan::Callback *callback,char *addr_str,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress)
-    : Nan::AsyncWorker(callback), addr_str(addr_str), lock(lock), handle(handle), communicationInProgress(communicationInProgress) {}
+    RecieveWorker(Nan::Callback *callback,char *addr_str,uv_rwlock_t *lock, mbus_handle *handle, bool *communicationInProgress, int max_frames)
+    : Nan::AsyncWorker(callback), addr_str(addr_str), lock(lock), handle(handle), communicationInProgress(communicationInProgress), max_frames(max_frames){}
     ~RecieveWorker() {
         free(addr_str);
     }
@@ -322,7 +322,7 @@ public:
 
         // instead of the send and recv, use this sendrecv function that
         // takes care of the possibility of multi-telegram replies (limit = 16 frames)
-        if (mbus_sendrecv_request(handle, address, &reply, MAXFRAMES) != 0)
+        if (mbus_sendrecv_request(handle, address, &reply, max_frames) != 0)
         {
             sprintf(error, "Failed to send/receive M-Bus request frame[%s].", addr_str);
             SetErrorMessage(error);
@@ -385,6 +385,7 @@ public:
 private:
     char *data;
     char *addr_str;
+    int max_frames;
     uv_rwlock_t *lock;
     mbus_handle *handle;
     bool *communicationInProgress;
@@ -396,11 +397,17 @@ NAN_METHOD(MbusMaster::Get) {
     MbusMaster* obj = node::ObjectWrap::Unwrap<MbusMaster>(info.This());
 
     char *address = get(Nan::To<v8::String>(info[0]).ToLocalChecked(),"0");
-    Nan::Callback *callback = new Nan::Callback(info[1].As<Function>());
+    int max_frames = (int)Nan::To<int64_t>(info[1]).FromJust();
+    Nan::Callback *callback = new Nan::Callback(info[2].As<Function>());
+
+    char num_char[10 + sizeof(char)];
+    std::sprintf(num_char, "%d", max_frames);
+    MBUS_ERROR("max frames = %s.", num_char);
+
     if(obj->connected) {
         obj->communicationInProgress = true;
 
-        Nan::AsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle, &(obj->communicationInProgress)));
+        Nan::AsyncQueueWorker(new RecieveWorker(callback, address, &(obj->queueLock), obj->handle, &(obj->communicationInProgress), max_frames));
     } else {
         Local<Value> argv[] = {
             Nan::Error("Not connected to port")
