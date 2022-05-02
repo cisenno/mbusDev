@@ -1,0 +1,77 @@
+{
+  "_from": "node-mbus@^1.2.2",
+  "_id": "node-mbus@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-Acc2Y04U5DHHQO3Bc05chUy0+vcsy07PeTU68HWV2KG8ckS44RNbXP1lfcPvb9ulwy0178pZpqWjO8f7Zp/WTg==",
+  "_location": "/node-mbus",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "node-mbus@^1.2.2",
+    "name": "node-mbus",
+    "escapedName": "node-mbus",
+    "rawSpec": "^1.2.2",
+    "saveSpec": null,
+    "fetchSpec": "^1.2.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-mbus/-/node-mbus-1.2.2.tgz",
+  "_shasum": "59549753e0efb7c6786118a5f06f7e95f44713c2",
+  "_spec": "node-mbus@^1.2.2",
+  "_where": "/home/cisenno",
+  "author": {
+    "name": "Apollon77",
+    "email": "iobroker@fischer-ka.de"
+  },
+  "bugs": {
+    "url": "https://github.com/Apollon77/node-mbus/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Semen Krivosheev",
+      "email": "semen.krivosheev@gmail.com"
+    },
+    {
+      "name": "Apollon77"
+    }
+  ],
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "nan": "~2.14.2",
+    "xml2js": "^0.4.23"
+  },
+  "deprecated": false,
+  "description": "libmbus binding",
+  "devDependencies": {
+    "chai": "^4.3.3",
+    "mocha": "^8.3.1",
+    "nyc": "^15.1.0"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "gypfile": true,
+  "homepage": "https://github.com/Apollon77/node-mbus#readme",
+  "keywords": [
+    "mbus"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "node-mbus",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Apollon77/node-mbus.git"
+  },
+  "scripts": {
+    "build": "node-gyp build",
+    "install": "node-gyp rebuild",
+    "prepare": "rm -rf libmbus && git clone -b build-windows --single-branch https://github.com/Apollon77/libmbus.git libmbus && rm libmbus/.gitignore && cp config.h libmbus/config.h",
+    "test": "nyc --reporter=lcov node_modules/mocha/bin/mocha --exit"
+  },
+  "version": "1.2.2"
+}

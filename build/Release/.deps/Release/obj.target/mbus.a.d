@@ -1,0 +1,1 @@
+cmd_Release/obj.target/mbus.a := rm -f Release/obj.target/mbus.a && ar crs Release/obj.target/mbus.a Release/obj.target/libmbus/libmbus/mbus/mbus-protocol-aux.o Release/obj.target/libmbus/libmbus/mbus/mbus-protocol.o Release/obj.target/libmbus/libmbus/mbus/mbus-serial.o Release/obj.target/libmbus/libmbus/mbus/mbus-tcp.o Release/obj.target/libmbus/libmbus/mbus/mbus.o
